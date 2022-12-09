@@ -1,0 +1,26 @@
+
+************copy files to Cli pods************
+kubectl cp -n carrier-net :/opt/gopath/src/github.com/hyperledger/fabric/peer
+kubectl cp -n manufacturer-net :/opt/gopath/src/github.com/hyperledger/fabric/peer
+
+
+************login to peer-cli************
+kubectl exec -n manufacturer-net --stdin --tty   peer0-cli-6b8497d965-4xs4w -- /bin/bash
+kubectl exec -n carrirer-net --stdin --tty   peer0-cli-cf5b74cbf-48swl -- /bin/bash
+********************************
+
+*******************Deploy chaincode 1.4 *********************
+
+peer chaincode install -n sacc -v 1.0 -p sacc --lang "golang"
+
+export ORDERER_CONTAINER=orderer1.supplychain-net:7050
+
+peer chaincode instantiate -o $ORDERER_CONTAINER --tls --cafile $ORDERER_CA -n sacc -v 1.0 -c '{"Args":["key1","value1"]}' -C allchannel -P "OR('carrierMSP.member','manufacturerMSP.member')"
+
+peer chaincode query -C allchannel -n sacc -c '{"Args":["get","key1"]}'
+
+**on Carrier-net cli***
+peer chaincode invoke -o orderer1.supplychain-net:7050 --tls --cafile $ORDERER_CA --peerAddresses peer0.carrier-net:7051 \
+--tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE -C allchannel -n sacc -c '{"Args":["set","name","Brahma"]}'
+
+*******************Deploy chaincode 1.4 *********************
