@@ -544,7 +544,7 @@
         "fabric_service_consensus":{
           "type": "object",
           "properties": {
-            "name": {"type":"string","enum": ["kafka","raft"],"description":"Name of the Consensus service. Can be raft or kafka."}
+            "name": {"type":"string","enum": ["solo","kafka","raft"],"description":"Name of the Consensus service. Can be raft or kafka."}
             },
           "required":["name"],
           "if": {"properties": { "name": { "const": "kafka" } } },
