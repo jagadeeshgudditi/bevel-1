@@ -564,7 +564,7 @@
             "type": {"type":"string","const": "orderer"},
             "status": {"type":"string","enum": ["new","existing"],"description":"(Only needed to add new orderer). Possible values are 'new' or 'existing'"},
             "name": { "type": "string","pattern": "^[a-z0-9-]{1,30}$","description":"Name of the Orderer service"},
-            "consensus": {"type":"string","enum": ["kafka","raft"]},
+            "consensus": {"type":"string","enum": ["solo","kafka","raft"]},
             "grpc":{ "$ref":"#/definitions/shared_port"}
             },
           "required": [ "type","name","consensus","grpc"],
